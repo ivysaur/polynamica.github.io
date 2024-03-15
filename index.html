@@ -5,8 +5,60 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script>
+    const postDest = 'https://docs.google.com/forms/d/e/1FAIpQLSfKLGjBddZs5U3-kSG4ONw7v4c1uY4LS8Nh_SRrOPSEcvdIMw/formResponse';
+    const postKey = 'entry.1325614617';
+
+    $(function () {
+      $('#form').on('submit', (evt) => {
+        evt.preventDefault();
+
+        const formData  = new FormData();
+        formData.append(postKey, $('#form-input-email').val());
+
+        console.log('hello: ', formData);
+
+        fetch(postDest, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData,
+          headers: {
+            // 'Content-Type': 'multipart/form-data;',
+          }
+        }).then(() => {
+          $('#form').hide();
+          $('#success-message').show();
+        });
+      });
+    });
+  </script>
+  <style>
+    body { background: lightblue; }
+    .row { margin-top: 10px; }
+    #success-message { display: none; font-weight: bold; color: darkgreen; }
+  </style>
 </head>
 <body>
-  Hello
+  <div class="row">Testing email submit page</div>
+  <form id="form">
+    <div class="row">
+      <input
+        type="text"
+        size="50"
+        placeholder="please enter your email"
+        name="email"
+        id="form-input-email"
+      />
+    </div>
+    <div class="row">
+      <input
+        type="submit"
+        id="form-submit"
+      />
+    </div>
+  </form>
+  <div id="success-message" class="row">
+    Thank you, email received.
+  </div>
 </body>
 </html>

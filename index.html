@@ -10,14 +10,28 @@
     const postKey = 'entry.1325614617';
 
     $(function () {
+      let isFormInSubmission = false;
+
       $('#form').on('submit', (evt) => {
         evt.preventDefault();
+        if (isFormInSubmission) {
+          return;
+        }
+
+        isFormInSubmission = true;
+
+        const emailVal = $('#form-input-email').val();
+        if (!emailVal) {
+          $('#form-message')
+            .text('Email required.')
+            .addClass('has-error')
+            .show();
+          isFormInSubmission = false;
+          return;
+        }
 
         const formData  = new FormData();
-        formData.append(postKey, $('#form-input-email').val());
-
-        console.log('hello: ', formData);
-
+        formData.append(postKey, emailVal);
         fetch(postDest, {
           method: 'POST',
           mode: 'no-cors',
@@ -26,39 +40,70 @@
             // 'Content-Type': 'multipart/form-data;',
           }
         }).then(() => {
-          $('#form').hide();
-          $('#success-message').show();
+          $('#form-input-email').hide();
+          $('#form-input-submit').hide();
+          $('#form-message')
+            .text('Thank you, email received.')
+            .removeClass('has-error')
+            .show();
+        }).catch((err) => {
+          $('#form-message')
+            .text('An unexpected error occurred, email not received.')
+            .addClass('has-error')
+            .show();
+          isFormInSubmission = false;
         });
       });
     });
   </script>
   <style>
-    body { background: lightblue; }
-    .row { margin-top: 10px; }
-    #success-message { display: none; font-weight: bold; color: darkgreen; }
+    body { background: #FFF7ED; font-family: Georgia, 'Times New Roman', Times, serif; color: darkgreen; }
+    h1 { font-size: 30px; font-weight: normal; margin: 20px; padding: 0; }
+    .wrapper { width: 780px; margin: auto; }
+    .center { text-align: center; }
+    .subtitle { line-height: 150%; font-size: 24px; margin-bottom: 30px; }
+    .row { margin-bottom: 20px; }
+    .form-input { padding: 6px 12px; font-size: 24px; border-radius: 22px; transition: background 0.6s; }
+    #form-input-email { width: 500px; height: 30px; border: 1px solid darkgreen; background: #FFF7ED; text-align: center; }
+    #form-input-email:focus { background: white; outline: none; }
+    #form-submit { width: 160px; height: 44px; border: none; background: darkgreen; color: white; font-size: 16px; }
+    #form-submit:hover { background: forestgreen; cursor: pointer; }
+
+    #form-message { display: none; font-weight: bold; color: darkgreen; margin-top: 10px; }
+    #form-message.has-error { color: darkred; font-weight: normal; }
   </style>
 </head>
 <body>
-  <div class="row">Testing email submit page</div>
-  <form id="form">
-    <div class="row">
-      <input
-        type="text"
-        size="50"
-        placeholder="please enter your email"
-        name="email"
-        id="form-input-email"
-      />
+  <h1>Polynamica</h1>
+  <div class="wrapper">
+    <div class="center">
+      <div class="subtitle">
+        Sign up to our newsletter and join the community in Madrid.<br/>
+        We will share our favourite English speaking events with you.
+      </div>
+      <form id="form">
+        <div class="row">
+          <input
+            type="text"
+            size="50"
+            class="form-input"
+            placeholder="please enter your email"
+            name="email"
+            id="form-input-email"
+          />
+          <div id="form-message">
+            Thank you, email received.
+          </div>
+        </div>
+        <div class="row">
+          <input
+            type="submit"
+            class="form-input"
+            id="form-submit"
+          />
+        </div>
+      </form>
     </div>
-    <div class="row">
-      <input
-        type="submit"
-        id="form-submit"
-      />
     </div>
-  </form>
-  <div id="success-message" class="row">
-    Thank you, email received.
-  </div>
 </body>
 </html>

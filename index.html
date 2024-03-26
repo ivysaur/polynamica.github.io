@@ -59,7 +59,7 @@
   <style>
     body { background: #FFF7ED; font-family: Georgia, 'Times New Roman', Times, serif; color: darkgreen; }
     h1 { font-size: 30px; font-weight: normal; margin: 20px; padding: 0; }
-    .wrapper { width: 780px; margin: auto; }
+    .wrapper { width: 100%; max-width: 780px; margin: auto; }
     .center { text-align: center; }
     .subtitle { line-height: 150%; font-size: 24px; margin-bottom: 30px; }
     .row { margin-bottom: 20px; }
@@ -71,6 +71,10 @@
 
     #form-message { display: none; font-weight: bold; color: darkgreen; margin-top: 10px; }
     #form-message.has-error { color: darkred; font-weight: normal; }
+
+    @media all and (max-width: 680px) {
+			#form-input-email {width: 80%; height: auto;}
+		}
   </style>
 </head>
 <body>
